@@ -1,32 +1,22 @@
-from langchain_experimental.utilities import PythonREPL
+import streamlit as st
+from PIL import Image
+import os
+from main import generate_and_save_diagram
 
+st.title("Architecture Diagram Generator 💻")
 
-# Create a diagram
-python_repl = PythonREPL()
-a="""
-from diagrams import Diagram
-from diagrams.aws.compute import EC2
-from diagrams.aws.network import ELB
-from diagrams.aws.database import RDS
-from diagrams.onprem.client import User
+user_prompt = st.text_area("Describe your architecture:", height=300, placeholder="e.g., A web server connected to a database and cache...")
 
-with Diagram("Simple Web Service Architecture", filename="/home/anirudh/diag/web_architecture", outformat="png"):
-    user = User("User")
+if st.button("Generate Diagram"):
+    if user_prompt:
+        with st.spinner("Generating diagram..."):
+            diagram_path = generate_and_save_diagram(user_prompt)
+            if diagram_path and os.path.exists(diagram_path):
+                st.success("Diagram generated successfully!")
+                st.image(Image.open(diagram_path), caption="Generated Architecture Diagram")
+            else:
+                st.error("Diagram could not be generated. Please check your input or try again.")
+    else:
+        st.error("Please provide a description of your architecture.")
 
-    # Load balancer
-    lb = ELB("Load Balancer")
-
-    # Web servers
-    web1 = EC2("Web Server 1")
-    web2 = EC2("Web Server 2")
-
-    # Database
-    db = RDS("Database")
-
-    # Connect the nodes
-    user >> lb >> [web1, web2]
-    web1 >> db
-    web2 >> db
-"""
-
-python_repl.run(a)
+ 

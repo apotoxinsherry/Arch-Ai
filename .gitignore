@@ -1,2 +1,4 @@
 .env
 .venv
+generated_diagrams/
+__pycache__
