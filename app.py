@@ -31,11 +31,22 @@ st.markdown("""
         margin: 1rem 0;
     }
     .info-box {
-        background-color: #E3F2FD;
         padding: 1rem;
         border-radius: 5px;
         margin: 1rem 0;
     }
+    @media (prefers-color-scheme: light) {
+    .info-box {
+        background-color: #E3F2FD; /* Light mode color */
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .info-box {
+         color: #ffffff; 
+        background-color: #355C58; /* Darker muted teal */
+    }
+}
     .stButton>button {
         width: 100%;
         border-radius: 5px;
